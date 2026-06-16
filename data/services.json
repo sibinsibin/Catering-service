@@ -1,0 +1,74 @@
+[
+  {
+    "id": "service-wedding-101",
+    "name": "Grand Imperial Wedding Banquet",
+    "description": "A premium, full-course buffet featuring exquisite international cuisines, silver service, and elegant table arrangements tailored for magical weddings.",
+    "category": "wedding",
+    "price": 65,
+    "minGuests": 100,
+    "maxGuests": 500,
+    "menu": [
+      "Welcome Drinks & Gourmet Mocktails",
+      "Premium Hot & Cold Hors d'oeuvres",
+      "Main Course (Choice of 3 Proteins, 4 Sides)",
+      "Custom Multi-tier Dessert Counter",
+      "Artisanal Bread Basket & Spreads"
+    ],
+    "image": "/images/wedding_catering.png",
+    "available": true
+  },
+  {
+    "id": "service-corporate-102",
+    "name": "Elite Executive Corporate Lunch",
+    "description": "Professional hot buffet and platter service. Perfect for business meetings, corporate conferences, and networking events. Includes non-alcoholic beverages and custom styling.",
+    "category": "corporate",
+    "price": 35,
+    "minGuests": 20,
+    "maxGuests": 150,
+    "menu": [
+      "Gourmet Sandwiches & Wraps",
+      "Seasonal Organic Greens & Quinoa Salad",
+      "Hot Entrées (Herb Chicken, Baked Salmon, Vegan Pasta)",
+      "Fresh Fruit Platters & Mini Patisseries",
+      "Premium Coffee, Tea & Infused Water Bar"
+    ],
+    "image": "/images/corporate_catering.png",
+    "available": true
+  },
+  {
+    "id": "service-casual-103",
+    "name": "Rustic Backyard Grill & BBQ",
+    "description": "A casual, mouthwatering outdoor barbecue experience featuring live grill stations, hickory-smoked meats, and classic homestyle sides.",
+    "category": "casual",
+    "price": 40,
+    "minGuests": 15,
+    "maxGuests": 100,
+    "menu": [
+      "Slow-Smoked Hickory Beef Brisket",
+      "Flame-Grilled Artisan Burgers & Sausages",
+      "Honey-Glazed Chargrilled Corn on the Cob",
+      "Creamy Red Potato Salad & Sweet Coleslaw",
+      "Fresh Fruit Cobbler & Traditional Lemonade"
+    ],
+    "image": "/images/bbq_catering.png",
+    "available": true
+  },
+  {
+    "id": "service-social-104",
+    "name": "Artisanal Dessert & High Tea",
+    "description": "A sophisticated afternoon tea selection with delicate finger sandwiches, freshly baked scones, and hand-crafted pastries, served on vintage tier stands.",
+    "category": "social",
+    "price": 25,
+    "minGuests": 10,
+    "maxGuests": 80,
+    "menu": [
+      "Assorted Cucumber, Salmon & Egg Finger Sandwiches",
+      "Buttermilk Scones with Clotted Cream & Strawberry Jam",
+      "French Macarons & Dark Chocolate Eclairs",
+      "Fresh Seasonal Berry Skewers",
+      "Selection of Fine Loose-Leaf Teas & Single-Origin Coffee"
+    ],
+    "image": "/images/dessert_catering.png",
+    "available": false
+  }
+]

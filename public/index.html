@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GourmetFlow - Professional premium catering service directory and management platform. Book world-class catering services for your events.">
+  <title>GourmetFlow | Premium Catering Service Directory</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Main Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fa-solid fa-utensils"></i></div>
+        <span class="logo-text">Gourmet<span>Flow</span></span>
+      </div>
+      
+      <div class="role-selector">
+        <button id="btn-customer-view" class="role-btn active" onclick="switchRole('customer')">
+          <i class="fa-solid fa-user"></i> Customer Portal
+        </button>
+        <button id="btn-admin-view" class="role-btn" onclick="openAdminLoginModal()">
+          <i class="fa-solid fa-lock"></i> Admin Dashboard
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- CUSTOMER VIEW                              -->
+  <!-- ========================================== -->
+  <main id="customer-view" class="view-section active">
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Exquisite Catering for Life's Celebrations</h1>
+        <p>From luxurious wedding banquets to elite corporate luncheons, find and book the perfect culinary experience for your guests.</p>
+        <a href="#services-catalog" class="cta-btn">Browse Catering Services</a>
+      </div>
+    </section>
+
+    <!-- Services Catalog -->
+    <section id="services-catalog" class="catalog-section">
+      <div class="section-header">
+        <h2>Our Catering Services</h2>
+        <p>Explore curated menus and premium culinary configurations ready to book.</p>
+      </div>
+
+      <!-- Filters Panel -->
+      <div class="filter-panel">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-input" placeholder="Search catering services, menus, cuisines..." oninput="filterServices()">
+        </div>
+        
+        <div class="filter-options">
+          <div class="category-filters" id="category-filters-container">
+            <button class="filter-chip active" data-category="all" onclick="setCategoryFilter('all')">All Categories</button>
+            <button class="filter-chip" data-category="wedding" onclick="setCategoryFilter('wedding')">Weddings</button>
+            <button class="filter-chip" data-category="corporate" onclick="setCategoryFilter('corporate')">Corporate</button>
+            <button class="filter-chip" data-category="casual" onclick="setCategoryFilter('casual')">Casual</button>
+            <button class="filter-chip" data-category="social" onclick="setCategoryFilter('social')">Social Events</button>
+          </div>
+          
+          <div class="guest-filter-wrapper">
+            <label for="guest-input-filter"><i class="fa-solid fa-users"></i> Guests:</label>
+            <input type="number" id="guest-input-filter" placeholder="e.g., 50" min="1" oninput="filterServices()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Services Grid -->
+      <div id="services-grid" class="services-grid">
+        <!-- Dynmically rendered service cards -->
+        <div class="loader-container">
+          <div class="spinner"></div>
+          <p>Loading premium catering services...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- ADMIN VIEW                                 -->
+  <!-- ========================================== -->
+  <main id="admin-view" class="view-section">
+    <!-- Admin Dashboard Header -->
+    <section class="admin-dashboard-header">
+      <div class="admin-title">
+        <h1>Admin Control Center</h1>
+        <p>Manage active catering plans, service availability, and guest booking requests.</p>
+      </div>
+      <div class="admin-actions">
+        <button id="btn-create-service" class="btn btn-primary" onclick="openCreateServiceModal()">
+          <i class="fa-solid fa-plus"></i> Add New Catering Service
+        </button>
+        <button class="btn btn-secondary" onclick="logoutAdmin()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Exit Admin Mode
+        </button>
+      </div>
+    </section>
+
+    <!-- Dashboard Stats Widgets -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon icon-services"><i class="fa-solid fa-folder-open"></i></div>
+        <div class="stat-details">
+          <h3 id="stat-total-services">0</h3>
+          <p>Total Services</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon icon-active"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-details">
+          <h3 id="stat-active-services">0</h3>
+          <p>Available Services</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon icon-bookings"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <div class="stat-details">
+          <h3 id="stat-pending-bookings">0</h3>
+          <p>Pending Requests</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon icon-revenue"><i class="fa-solid fa-calendar-check"></i></div>
+        <div class="stat-details">
+          <h3 id="stat-completed-bookings">0</h3>
+          <p>Approved Bookings</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Content Columns -->
+    <section class="admin-workspace">
+      <!-- Tabs Navigation -->
+      <div class="workspace-tabs">
+        <button id="tab-btn-services" class="tab-btn active" onclick="switchAdminTab('services')">
+          <i class="fa-solid fa-plate-wheat"></i> Catering Offerings
+        </button>
+        <button id="tab-btn-bookings" class="tab-btn" onclick="switchAdminTab('bookings')">
+          <i class="fa-solid fa-receipt"></i> Booking Requests
+        </button>
+      </div>
+
+      <!-- Services List Panel -->
+      <div id="tab-panel-services" class="tab-panel active">
+        <div class="card-container">
+          <table class="data-table" id="admin-services-table">
+            <thead>
+              <tr>
+                <th>Service Details</th>
+                <th>Category</th>
+                <th>Price / Plate</th>
+                <th>Guest Capacity</th>
+                <th>Client Visibility</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-services-list">
+              <!-- Services row entries dynamically loaded -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bookings Management Panel -->
+      <div id="tab-panel-bookings" class="tab-panel">
+        <div class="card-container">
+          <table class="data-table" id="admin-bookings-table">
+            <thead>
+              <tr>
+                <th>Booking Ref & Date</th>
+                <th>Catering Package</th>
+                <th>Customer Details</th>
+                <th>Guests</th>
+                <th>Instructions</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-bookings-list">
+              <!-- Bookings row entries dynamically loaded -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- ========================================== -->
+  <!-- MODALS & DIALOGS                           -->
+  <!-- ========================================== -->
+
+  <!-- Modal 1: Admin Authorization Challenge -->
+  <div id="admin-auth-modal" class="modal-overlay">
+    <div class="modal-card modal-small">
+      <div class="modal-header">
+        <h3>Admin Authorization</h3>
+        <button class="close-modal-btn" onclick="closeAdminLoginModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="auth-message">Please enter the administrator passcode to access dashboard controls.</p>
+        <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label for="admin-password">Passcode</label>
+            <input type="password" id="admin-password" placeholder="Enter password (default: admin)" required>
+            <span id="login-error-msg" class="error-msg-text"></span>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeAdminLoginModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Authenticate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Catering Details and Booking Request Form -->
+  <div id="booking-modal" class="modal-overlay">
+    <div class="modal-card modal-large">
+      <div class="modal-header">
+        <h3 id="booking-service-title">Catering Service Title</h3>
+        <button class="close-modal-btn" onclick="closeBookingModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="booking-split">
+          <!-- Left side details -->
+          <div class="service-detail-view">
+            <div class="detail-image-wrapper">
+              <img id="booking-service-image" src="" alt="Catering Details Image">
+              <span id="booking-service-category" class="category-badge">Category</span>
+            </div>
+            
+            <div class="detail-description">
+              <h4>About the Service</h4>
+              <p id="booking-service-desc">Description of service goes here...</p>
+            </div>
+            
+            <div class="detail-stats-bar">
+              <div class="detail-stat">
+                <span class="label">Price per plate</span>
+                <span class="value" id="booking-service-price">$0</span>
+              </div>
+              <div class="detail-stat">
+                <span class="label">Min Capacity</span>
+                <span class="value" id="booking-service-min-guests">0 guests</span>
+              </div>
+              <div class="detail-stat">
+                <span class="label">Max Capacity</span>
+                <span class="value" id="booking-service-max-guests">0 guests</span>
+              </div>
+            </div>
+            
+            <div class="detail-menu">
+              <h4>Sample Menu Offerings</h4>
+              <ul id="booking-service-menu-list">
+                <!-- List items loaded dynamically -->
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Right side booking form -->
+          <div class="booking-form-panel">
+            <h4>Request Event Catering</h4>
+            <p class="form-helper">Fill out the details below to submit a booking inquiry. Our catering representative will review your request.</p>
+            
+            <form id="booking-request-form" onsubmit="submitBookingRequest(event)">
+              <input type="hidden" id="form-service-id">
+              <input type="hidden" id="form-service-name">
+              
+              <div class="form-group">
+                <label for="customer-name">Full Name <span class="required">*</span></label>
+                <input type="text" id="customer-name" placeholder="John Doe" required>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="customer-email">Email Address <span class="required">*</span></label>
+                  <input type="email" id="customer-email" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label for="customer-phone">Phone Number</label>
+                  <input type="tel" id="customer-phone" placeholder="(555) 000-0000">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="event-date">Event Date <span class="required">*</span></label>
+                  <input type="date" id="event-date" required>
+                </div>
+                <div class="form-group">
+                  <label for="guest-count">Expected Guests <span class="required">*</span></label>
+                  <input type="number" id="guest-count" placeholder="50" min="1" required>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="special-instructions">Special Instructions & Dietary Accommodations</label>
+                <textarea id="special-instructions" rows="4" placeholder="E.g., Gluten-free options needed, live counters, specific theme preferences..."></textarea>
+              </div>
+              
+              <div class="form-actions-full">
+                <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">Back to Catalog</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Submit Booking Inquiry</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Create / Edit Catering Service Modal -->
+  <div id="service-form-modal" class="modal-overlay">
+    <div class="modal-card modal-medium">
+      <div class="modal-header">
+        <h3 id="service-modal-title">Add New Catering Service</h3>
+        <button class="close-modal-btn" onclick="closeServiceFormModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="service-upsert-form" onsubmit="handleServiceUpsert(event)">
+          <input type="hidden" id="upsert-service-id">
+          
+          <div class="form-group">
+            <label for="service-name">Service Package Name <span class="required">*</span></label>
+            <input type="text" id="service-name" placeholder="e.g., Luxury Seafood Buffet" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="service-description">Service Description <span class="required">*</span></label>
+            <textarea id="service-description" rows="3" placeholder="Provide a premium overview of this package..." required></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="service-category">Category <span class="required">*</span></label>
+              <select id="service-category" required>
+                <option value="wedding">Wedding Banquet</option>
+                <option value="corporate">Corporate Lunch</option>
+                <option value="casual">Casual Backyard/Grill</option>
+                <option value="social">Social Events & Galas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="service-price">Price Per Plate ($) <span class="required">*</span></label>
+              <input type="number" id="service-price" placeholder="45" min="1" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="service-min-guests">Min Guests Capacity</label>
+              <input type="number" id="service-min-guests" placeholder="10" min="1" value="10">
+            </div>
+            <div class="form-group">
+              <label for="service-max-guests">Max Guests Capacity</label>
+              <input type="number" id="service-max-guests" placeholder="500" min="1" value="500">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="service-image-select">Catering Photo Asset <span class="required">*</span></label>
+            <select id="service-image-select">
+              <option value="/images/wedding_catering.png">Wedding Table Setup (Luxury)</option>
+              <option value="/images/corporate_catering.png">Corporate Platter/Appetizer (Professional)</option>
+              <option value="/images/bbq_catering.png">Backyard Smoked BBQ (Grill)</option>
+              <option value="/images/dessert_catering.png">Artisanal High Tea & Desserts (Chic)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="service-menu-items">Menu Offerings (one item per line) <span class="required">*</span></label>
+            <textarea id="service-menu-items" rows="5" placeholder="Welcome Drink&#10;Gourmet Starter&#10;Main Course Selection&#10;Dessert Platter" required></textarea>
+          </div>
+          
+          <div class="form-group inline-checkbox">
+            <input type="checkbox" id="service-available" checked>
+            <label for="service-available">Make available immediately (Visible to clients in catalog)</label>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeServiceFormModal()">Cancel</button>
+            <button type="submit" id="btn-upsert-submit" class="btn btn-primary">Save Catering Package</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>&copy; 2026 GourmetFlow Catering Systems. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- App Javascript -->
+  <script src="/js/app.js"></script>
+</body>
+</html>
